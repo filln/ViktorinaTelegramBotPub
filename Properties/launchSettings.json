@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "ViktorinaTelegramBot": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5000",
+      "launchBrowser": false,
+      "dotnetRunMessages": true
+    }
+  }
+}
