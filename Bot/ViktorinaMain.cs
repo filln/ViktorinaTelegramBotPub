@@ -44,8 +44,7 @@ namespace Viktorina.Bot
 
             statsBaseManager.TryReadData();
 
-            OutputHelpAfterLaunch();
-
+            
         }
 
         /**

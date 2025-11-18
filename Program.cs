@@ -3,51 +3,37 @@
 //Создает объекты для соединения с телеграмом, управляет созданием и доступом к ViktorinaStarter
 
 using Viktorina.Bot;
+using ViktorinaTelegramBot.Telegram;
 
-
-namespace ViktorinaTelegramBot;
-public static class Program
+namespace ViktorinaTelegramBot
 {
-    public static void Main(string[] args)
+    public static class Program
     {
-        CreateHostBuilder(args).Build().Run();
-        viktorinaStarter = ViktorinaStarter.GetCurrent();
-        AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
-    }
-
-
-    /**
-     * Variables
-     */
-    public static HandleUpdateService? handleUpdateService;
-    private static ViktorinaStarter? _viktorinaStarter;
-    public static ViktorinaStarter viktorinaStarter
-    {
-        get
+        public static void Main(string[] args)
         {
-            return ViktorinaStarter.GetCurrent();
+            ViktorinaStarter.GetCurrent();
+            TelegramConnect.GetCurrent();
+            AppDomain.CurrentDomain.ProcessExit += new EventHandler(CurrentDomain_ProcessExit);
+            Console.WriteLine("bot is running... Press Escape to terminate");
+            while (Console.ReadKey(true).Key != ConsoleKey.Escape) ;
+            TelegramConnect.GetCurrent().cts.Cancel(); // stop the bot
         }
-        private set
+
+
+        /**
+         * Variables
+         */
+
+        /**
+         * Methods
+         */
+
+        private static void CurrentDomain_ProcessExit(object? sender, EventArgs e)
         {
-            _viktorinaStarter = value;
+            ViktorinaStarter.GetCurrent().CurrentDomain_ProcessExit();
+            Console.WriteLine("CurrentDomain_ProcessExit()");
         }
+
+
     }
-
-    /**
-     * Methods
-     */
-    public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureWebHostDefaults(webBuilder =>
-            {
-                webBuilder.UseStartup<Startup>();
-            });
-
-    private static void CurrentDomain_ProcessExit(object? sender, EventArgs e)
-    {
-        viktorinaStarter.CurrentDomain_ProcessExit();
-        Console.WriteLine("CurrentDomain_ProcessExit()");
-    }
-
-
 }

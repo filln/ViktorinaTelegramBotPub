@@ -11,6 +11,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Viktorina.Localization;
 using Viktorina.Bot.Stats;
 using ViktorinaTelegramBot;
+using ViktorinaTelegramBot.Telegram;
 
 
 namespace Viktorina.Bot
@@ -33,6 +34,7 @@ namespace Viktorina.Bot
             localizationManager.SelectLanguage(LanguagesList.russian);
             viktorinaMain = new ViktorinaMain(this);
             SendViktorinaMainToOutputTextManager();
+            
         }
 
         private static ViktorinaStarter? current;
@@ -40,8 +42,10 @@ namespace Viktorina.Bot
         {
             if (current == null)
             {
+                Console.WriteLine("ViktorinaStarter? current == null");
                 current = new ViktorinaStarter();
             }
+            Console.WriteLine("ViktorinaStarter? current != null");
             return current;
         }
 
@@ -64,7 +68,6 @@ namespace Viktorina.Bot
         public ViktorinaMain viktorinaMain;
         private LocalizationManager localizationManager;
 
-
         /**
          * Methods
          */
@@ -72,13 +75,12 @@ namespace Viktorina.Bot
         public void TakeInputText(string inputText, string username)
         {
             viktorinaMain.TakeInputText(inputText, username);
-            //Console.WriteLine("TakeInputText");
-            //OutputText(username + " => " + inputText);
         }
 
         public void OutputText(string outputText, bool isFormatedText = true)
         {
-            Program.handleUpdateService!.SendMessage(outputText, isFormatedText);
+            //Console.WriteLine(outputText);
+            TelegramConnect.GetCurrent().OutputText(outputText, isFormatedText);
         }
 
         public void OutputDebugMessage(string outputText)

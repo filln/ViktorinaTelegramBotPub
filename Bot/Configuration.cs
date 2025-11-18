@@ -12,8 +12,8 @@ namespace Viktorina.Bot
 		{
 			//OwnerID = 5244963513;
 			//channel id -722117411 or -1001680312705
-			OwnerName = "Owner's name";
-			BotName = "Bot's name";
+			OwnerName = "Owners_name";
+			BotName = "Bots_name;
 			CommandsPrefix = '!';
 			//HintSymbol = System.Convert.ToChar(149); //'•' https://yorktown.cbe.wwu.edu/sandvig/shared/asciicodes.aspx
 			//HintSymbol = '*';

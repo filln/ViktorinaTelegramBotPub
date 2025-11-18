@@ -406,7 +406,7 @@ namespace Viktorina.Bot
             }
             else
             {
-                Console.WriteLine("OutputCongratOnCorrectAnswer3.1");
+                //Console.WriteLine("OutputCongratOnCorrectAnswer3.1");
                 OutputText
                 (
                     "Молодец, "
@@ -804,7 +804,7 @@ namespace Viktorina.Bot
             //OutputText("Введите !помощь для описания имеющихся команд.");
             //OutputText("Введите !описание для информации об игре.");
             //OutputText("Приятной игры!");
-            OutputText("Викторина проснулась!");
+            OutputText("Викторина запустилась!");
         }
 
 
