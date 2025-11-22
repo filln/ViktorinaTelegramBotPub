@@ -5,8 +5,10 @@
  */
 
 using System.Runtime.Serialization.Formatters.Binary;
-using Viktorina.Bot.Timers;
+//using ExtendedXmlSerializer;
+//using System.Xml.Serialization;
 using Viktorina.Bot.Stats;
+using Viktorina.Bot.Timers;
 
 namespace Viktorina.Bot
 {
@@ -86,6 +88,9 @@ namespace Viktorina.Bot
 		*/
         public string UserDataFolderName => viktorinaStarter.UserDataFolderName;
         public BinaryFormatter Formatter => viktorinaStarter.Formatter;
+        //public XmlSerializer Formatter => viktorinaStarter.Formatter;
+        //public IExtendedXmlSerializer Formatter => viktorinaStarter.Formatter;
+
         public string CurrentLanguage => viktorinaStarter.CurrentLanguage;
         /**
 		 * Configuration variables
@@ -142,7 +147,9 @@ namespace Viktorina.Bot
         public void TakeInputText(string inputText, string username)
         {
             //Если игрок ввел команду.
-            if (inputText[0] == CommandsPrefix)
+            if (inputText[0] == CommandsPrefix
+                || inputText[0] == '1'
+                )
             {
                 commandsHandler.HandleCommand(inputText, username);
                 return;
@@ -432,13 +439,12 @@ namespace Viktorina.Bot
             {
                 return;
             }
-            if(username != GameStarter && username != OwnerName)
-            {
-                return;
-            }
+            //if(username != GameStarter && username != OwnerName)
+            //{
+            //    return;
+            //}
 
             GameOn = false;
-            OutputAnswer();
             StopGame(username);
         }
         private void StopGame(string username)
@@ -446,11 +452,11 @@ namespace Viktorina.Bot
             StopTime = DateTime.Now;
             if (!SuperGameOn)
             {
-                OutputTextManager.ExecuteStop(CommandsPrefix + CommandsList.Start, CountOfQuestionsInRound, CountOfAnswersInRound, StopTime - StartTime);
+                OutputTextManager.ExecuteStop(CommandsPrefix + CommandsList.Start, CountOfQuestionsInRound, CountOfAnswersInRound, StopTime - StartTime, Answer);
             }
             else
             {
-                superGame.ExecuteStop(username, CommandsPrefix + CommandsList.Start, CountOfQuestionsInRound, CountOfAnswersInRound, StopTime - StartTime);
+                superGame.ExecuteStop(username, CommandsPrefix + CommandsList.Start, CountOfQuestionsInRound, CountOfAnswersInRound, StopTime - StartTime, Answer);
             }
         
             timersManager.StopWriteProfileBaseTimer();
@@ -477,10 +483,10 @@ namespace Viktorina.Bot
             }
             if(!SuperGameOn)
             {
-                if (username != GameStarter && username != OwnerName)
-                {
-                    return;
-                }
+                //if (username != GameStarter && username != OwnerName)
+                //{
+                //    return;
+                //}
             }
             else
             {
@@ -660,18 +666,18 @@ namespace Viktorina.Bot
             {
                 return;
             }
-            //OutputTextManager.OutputText("Викторина закрывается.");
+            OutputTextManager.OutputText("Викторина закрывается.");
             //timersManager.StopWriteProfileBaseTimer();
             //statsBaseManager.TryWriteData();
-            //viktorinaStarter.ExecuteClose();
-            //Console.WriteLine("close " + username);
+            Console.WriteLine("close " + username);
+            viktorinaStarter.ExecuteClose();
         }
 
         public void CurrentDomain_ProcessExit()
         {
             timersManager.StopWriteProfileBaseTimer();
             statsBaseManager.TryWriteData();
-            Console.WriteLine("CurrentDomain_ProcessExit()");
+            Console.WriteLine("Viktorina Main CurrentDomain_ProcessExit()");
         }
 
         //end of class

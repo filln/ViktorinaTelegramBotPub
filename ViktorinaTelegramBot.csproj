@@ -7,6 +7,7 @@
     <Copyright>Copyright 2021 Anatoli Kucharau https://vk.com/ulvprog. All Rights Reserved.</Copyright>
     <PackageProjectUrl>https://vk.com/ulvprog</PackageProjectUrl>
 	<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+	<OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

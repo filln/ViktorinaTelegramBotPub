@@ -37,7 +37,8 @@ namespace Viktorina.Bot
                 string startCommand,
                 int countOfQuestions,
                 int countOfAnswers,
-                TimeSpan duration
+                TimeSpan duration,
+                string answer
             );
 
         public void OutputQuestion(string outputText, int answerLength, int numberOfQuestion)
@@ -81,11 +82,18 @@ namespace Viktorina.Bot
                 DateTime lastGameDateTime,
                 string title
             );
-
+        public abstract string CreateBeginTopPointsStr();
         public abstract void OutputBeginTopPoints();
-
+        public abstract string CreateBeginTopRoundPointsStr();
         public abstract void OutputBeginTopRoundPoints();
-
+        public abstract string CreateProfileInTopPointsStr
+            (
+                int place,
+                string username,
+                bool allQuestionsAnswered,
+                string title,
+                int points
+            );
         public abstract void OutputProfileInTopPoints
             (
                 int place,
@@ -123,7 +131,7 @@ namespace Viktorina.Bot
             string title
             );
 
-        protected string OutputTitle(string title)
+        public string OutputTitle(string title)
         {
             return " [" + title + "] ";
         }
@@ -184,7 +192,7 @@ namespace Viktorina.Bot
 
         public abstract void OutputHelpAfterLaunch();
 
-        protected string CreateFormatedText(string text)
+        public string CreateFormatedText(string text)
         {
             return "<b><i>" + text + "</i></b>";
         }

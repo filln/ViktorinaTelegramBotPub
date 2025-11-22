@@ -1,9 +1,13 @@
 ﻿// Copyright 2021 Anatoli Kucharau https://vk.com/ulvprog. All Rights Reserved.
 
+
+
+using System.Runtime.InteropServices;
+using System.Text;
+
 /**
  * Обрабатывает и передает на отображение текст. Русский язык.
  */
-
 namespace Viktorina.Bot
 {
     class OutputTextManagerRussian : OutputTextManagerParent
@@ -22,57 +26,46 @@ namespace Viktorina.Bot
 
         public override void ExecuteHelp()
         {
-            OutputText(CreateFormatedText("Помощь по командам:"));
-            OutputText
-            (
-                CreateFormatedText(OutputCommandsPrefix() + CommandsList.Help)
+            OutputText(
+                CreateFormatedText("Помощь по командам:")
+                + "\n"
+                +CreateFormatedText(OutputCommandsPrefix() + CommandsList.Help)
+                + " (1помощь)"
                 + " - список и описание команд."
-            );
-            OutputText
-            (
-                CreateFormatedText(OutputCommandsPrefix() + CommandsList.Start)               
+                + "\n"
+                + CreateFormatedText(OutputCommandsPrefix() + CommandsList.Start)
+                + " (1старт)"
                 + " - запустить игру."
-            );
-            OutputText
-            (
-                CreateFormatedText(OutputCommandsPrefix() + CommandsList.Stop)               
+                + "\n"
+                + CreateFormatedText(OutputCommandsPrefix() + CommandsList.Stop)
+                + " (1стоп)"
                 + " - остановить игру."
-            );
-            OutputText
-            (
-                CreateFormatedText(CommandsList.Hint1)
+                + "\n"
+                + CreateFormatedText(CommandsList.Hint1)
+                + " (1х)"
                 + " - первая подсказка."
-            );
-            OutputText
-            (
-                CreateFormatedText(CommandsList.Hint2)
+                + "\n"
+                + CreateFormatedText(CommandsList.Hint2)
+                + " (11х)"
                 + " - вторая подсказка."
-            );
-            OutputText
-            (
-                CreateFormatedText(OutputCommandsPrefix() + CommandsList.Next)               
+                + "\n"
+                + CreateFormatedText(OutputCommandsPrefix() + CommandsList.Next)
+                + " (1д)"
                 + " - перейти к следующему вопросу."
-            );
-            OutputText
-            (
-                CreateFormatedText(OutputCommandsPrefix() + CommandsList.Stat)               
+                + "\n"
+                + CreateFormatedText(OutputCommandsPrefix() + CommandsList.Stat)
+                + " (1стат)"
                 + " - статистика игрока, отправившего команду."
-            );
-            OutputText
-            (
-                CreateFormatedText(OutputCommandsPrefix() + CommandsList.TopPoints)               
+                + "\n"
+                + CreateFormatedText(OutputCommandsPrefix() + CommandsList.TopPoints)
+                + " (1топ)"
                 + " - список лучших по очкам."
-            );
-            //OutputText
-            //(
-            //    CreateFormatedText(OutputCommandsPrefix() + CommandsList.ProfilesList)               
-            //    + " - список игроков со статистикой. "
-            //);
-            OutputText
-            (
-                CreateFormatedText(OutputCommandsPrefix() + CommandsList.Description)
+                + "\n"
+                + CreateFormatedText(OutputCommandsPrefix() + CommandsList.Description)
+                + " (1описание)"
                 + " - описание игры. "
             );
+
         }
         public override void ExecuteStart(int countOfQuestions)
         {
@@ -104,8 +97,7 @@ namespace Viktorina.Bot
             //Достигнут предел неотвеченных вопросов подряд.
             OutputText("Достигнут предел неотвеченных вопросов подряд.", false);
         }
-
-        public override void ExecuteStop
+        private string CreateStopStr
             (
                 string startCommand,
                 int countOfQuestions,
@@ -113,13 +105,10 @@ namespace Viktorina.Bot
                 TimeSpan duration
             )
         {
-            //Викторина остановлена. Для запуска напиши startCommand. Всего прозвучало countOfQuestions вопросов.
-            //Было дано countOfAnswers правильных ответов. Игра длилась duration.
-            //
-            OutputText
-            (
+            string stopStr =
                 "Викторина остановлена. Для запуска напиши "
                 + CreateFormatedText(startCommand)
+                + " (1старт)"
                 + ". Всего прозвучало "
                 + CreateFormatedText(countOfQuestions.ToString())
                 + " вопросов. Было дано "
@@ -130,8 +119,45 @@ namespace Viktorina.Bot
                 + CreateFormatedText(duration.ToString("%m"))
                 + " минут, "
                 + CreateFormatedText(duration.ToString("%s"))
-                + " секунд."
-            );
+                + " секунд.";
+            return stopStr;
+        }
+        private string CreateAnswerStr(string answer)
+        {
+            string outStr =
+                "Никто не ответил на вопрос, правильный ответ был "
+                + CreateFormatedText(answer)
+                + ".";
+            return outStr;
+        }
+        public override void ExecuteStop
+            (
+                string startCommand,
+                int countOfQuestions,
+                int countOfAnswers,
+                TimeSpan duration,
+                string answer
+            )
+        {
+            //Викторина остановлена. Для запуска напиши startCommand. Всего прозвучало countOfQuestions вопросов.
+            //Было дано countOfAnswers правильных ответов. Игра длилась duration.
+            //
+            string stopStr = CreateStopStr
+                (
+                    startCommand,
+                    countOfQuestions,
+                    countOfAnswers,
+                    duration
+                );
+            if (answer == null)
+            {
+                OutputText(stopStr);
+            }
+            else
+            {
+                string answerStr = CreateAnswerStr(answer);
+                OutputText(answerStr + "\n" + stopStr);
+            } 
         }
 
         protected override string OutputQuestionInternal(string outputText, int answerLength)
@@ -226,6 +252,8 @@ namespace Viktorina.Bot
 			Начал играть: 6 января 2009 г. (вторник) в 00:53:40. 
 			Последний раз играл: 7 декабря 2021 г. (вторник) в 19:54:48.
 			 */
+            string begin = beginGameDateTime.ToString("G");
+            string last = lastGameDateTime.ToString("G");
             if (allQuestionsAnswered)
             {
                 username = "[[" + username + "]]";
@@ -235,22 +263,48 @@ namespace Viktorina.Bot
                 CreateFormatedText(username)
                 + OutputTitle(title)
                 + ": "
-            );
-
-            OutputText
-            (
-                CreateFormatedText(rightAnswersCount.ToString())
+                + "\n"
+                + CreateFormatedText(rightAnswersCount.ToString())
                 + " ответов ("
                 + CreateFormatedText(points.ToString())
                 + " очков)"
-            );
-
-            OutputText
-            (
-                CreateFormatedText(originalRightAnswersCount.ToString())
+                + "\n"
+                + CreateFormatedText(originalRightAnswersCount.ToString())
                 + " оригинальных ответов"
-            );
+                + "\n"
+                + CreateFormatedText(rightAnswersCountMonth.ToString())
+                + " ответов ("
+                + CreateFormatedText(pointsMonth.ToString())
+                + " очков) за месяц"
+                + "\n"
+                + CreateFormatedText(rightAnswersCountDay.ToString())
+                + " ответов ("
+                + CreateFormatedText(pointsDay.ToString())
+                + " очков) за сутки"
+                + "\n"
+                + CreateFormatedText(maxRightAnswersCountInARow.ToString())
+                + " ответов подряд"
+                + "\n"
+                + "Самый быстрый ответ - за "
+                + CreateFormatedText(minRightAnswerTimeInterval.ToString())
+                + " секунд"
+                + "\n"
+                + CreateFormatedText(superGameRightAnswersCount.ToString())
+                + " выигранных суперигр (выиграно "
+                + CreateFormatedText(superGamePoints.ToString())
+                + " очков), "
+                + CreateFormatedText(superGameLoseCount.ToString())
+                + " проигранных суперигр (отдано "
+                + CreateFormatedText(superGameLosePoints.ToString())
+                + " очков)"
+                + "\n"
+                + "Начал играть: "
+                + CreateFormatedText(begin)
+                + "\n"
+                + "Последний раз играл: "
+                + CreateFormatedText(last)
 
+            );
             if (allQuestionsAnswered)
             {
                 OutputText
@@ -266,60 +320,11 @@ namespace Viktorina.Bot
                     + " [[[[[["
                 );
             }
-
-            OutputText
-            (
-                CreateFormatedText(rightAnswersCountMonth.ToString())
-                + " ответов ("
-                + CreateFormatedText(pointsMonth.ToString())
-                + " очков) за месяц"
-            );
-            OutputText
-            (
-                CreateFormatedText(rightAnswersCountDay.ToString())
-                + " ответов ("
-                + CreateFormatedText(pointsDay.ToString())
-                + " очков) за сутки"
-            );
-            OutputText
-            (
-                CreateFormatedText(maxRightAnswersCountInARow.ToString())
-                + " ответов подряд"
-            );
-            OutputText
-            (
-                "Самый быстрый ответ - за "
-                + CreateFormatedText(minRightAnswerTimeInterval.ToString())
-                + " секунд"
-            );
-            OutputText
-            (
-                CreateFormatedText(superGameRightAnswersCount.ToString())
-                + " выигранных суперигр (выиграно "
-                + CreateFormatedText(superGamePoints.ToString())
-                + " очков)"
-            );
-            OutputText
-            (
-                CreateFormatedText(superGameLoseCount.ToString())
-                + " проигранных суперигр (отдано "
-                + CreateFormatedText(superGameLosePoints.ToString())
-                + " очков)"
-            );
-            string begin = beginGameDateTime.ToString("G");
-            string last = lastGameDateTime.ToString("G");
-            OutputText
-            (
-                "Начал играть: "
-                + CreateFormatedText(begin)
-            );
-            OutputText
-            (
-                "Последний раз играл: "
-                + CreateFormatedText(last)
-            );
         }
-
+        public override string CreateBeginTopPointsStr()
+        {
+            return "Топ 5 игроков по очкам :";
+        }
         public override void OutputBeginTopPoints()
         {
             //Топ игроков по очкам (внутренняя база вопросов):
@@ -328,7 +333,10 @@ namespace Viktorina.Bot
                 CreateFormatedText("Топ 5 игроков по очкам :")
             );
         }
-
+        public override string CreateBeginTopRoundPointsStr()
+        {
+            return "Топ 5 игроков по очкам :";
+        }
         public override void OutputBeginTopRoundPoints()
         {
             //Топ игроков по очкам за раунд:
@@ -337,7 +345,32 @@ namespace Viktorina.Bot
                 CreateFormatedText("Топ 5 игроков по очкам за раунд :")
             );
         }
-
+        public override string CreateProfileInTopPointsStr
+            (
+                int place,
+                string username,
+                bool allQuestionsAnswered,
+                string title,
+                int points
+            )
+        {
+            //#1: Ulv звание -[[[ 50 очков.
+            if (allQuestionsAnswered)
+            {
+                username = "[[" + username + "]]";
+            }
+            string str =
+                "\n"
+                + "#"
+                + place.ToString()
+                + ": "
+                + CreateFormatedText(username)
+                + OutputTitle(title)
+                + " - "
+                + CreateFormatedText(points.ToString())
+                + " очков.";
+            return str;
+        }
         public override void OutputProfileInTopPoints
             (
                 int place,
@@ -402,6 +435,17 @@ namespace Viktorina.Bot
                     + " секунд и принёс тебе "
                     + CreateFormatedText(pointsIncrease.ToString())
                     + " очков. "
+                    + CreateCorrectAnswerBaseStr
+                        (
+                            username,
+                            points,
+                            answersCount,
+                            pointsRound,
+                            answersCountRound,
+                            originalRightAnswersCount,
+                            allQuestionsAnswered,
+                            title
+                        )
                 );
             }
             else
@@ -421,20 +465,50 @@ namespace Viktorina.Bot
                     + CreateFormatedText("+" + bonus.ToString())
                     + ")"
                     + " очков. "
+                    + CreateCorrectAnswerBaseStr
+                        (
+                            username,
+                            points,
+                            answersCount,
+                            pointsRound,
+                            answersCountRound,
+                            originalRightAnswersCount,
+                            allQuestionsAnswered,
+                            title
+                        )
                 );
             }
-            OutputCongratOnCorrectAnswerBase
-                (
-                    username,
-                    points,
-                    answersCount,
-                    pointsRound,
-                    answersCountRound,
-                    originalRightAnswersCount,
-                    allQuestionsAnswered,
-                    title
-                );
 
+        }
+        private string CreateCorrectAnswerBaseStr
+            (
+                string username,
+                int points,
+                int answersCount,
+                int pointsRound,
+                int answersCountRound,
+                int originalRightAnswersCount,
+                bool allQuestionsAnswered,
+                string title
+            )
+        {
+            string correctAnswerBaseStr =
+                "\n"
+                + CreateFormatedText(username)
+                + OutputTitle(title)
+                + " набирает "
+                + CreateFormatedText(points.ToString())
+                + " очков ("
+                + CreateFormatedText(answersCount.ToString())
+                + " ответов) | "
+                + CreateFormatedText(pointsRound.ToString())
+                + " очков ("
+                + CreateFormatedText(answersCountRound.ToString())
+                + " ответов) за раунд | "
+                + CreateFormatedText(originalRightAnswersCount.ToString())
+                + " оригинальных ответов.";
+
+            return correctAnswerBaseStr;
         }
 
         protected override void OutputCongratOnCorrectAnswerBase
@@ -645,19 +719,18 @@ namespace Viktorina.Bot
                 + " секунд и позволил тебе выиграть ставку в "
                 + CreateFormatedText(pointsIncrease.ToString())
                 + " очков!"
+                + CreateCorrectAnswerBaseStr
+                    (
+                        username,
+                        points,
+                        answersCount,
+                        pointsRound,
+                        answersCountRound,
+                        originalRightAnswersCount,
+                        allQuestionsAnswered,
+                        title
+                    )
             );
-
-            OutputCongratOnCorrectAnswerBase
-                (
-                    username,
-                    points,
-                    answersCount,
-                    pointsRound,
-                    answersCountRound,
-                    originalRightAnswersCount,
-                    allQuestionsAnswered,
-                    title
-                );
         }
 
         public override void OutputQuestionSuperGame(string outputText, int answerLength)
@@ -734,37 +807,47 @@ namespace Viktorina.Bot
 			  Приятной игры!
 			 */
 
-            OutputText("Viktorina online v.1");
             OutputText
             (
-                "Copyright 2021 Anatoli Kucharau "
-                + "https://vk.com/ulvprog"
+                "Viktorina online v.1"
+                + "\n"
+                + "Copyright 2021 Anatoli Kucharau "
+                + "https://vk.com/viktorina_place"
                 + " All Rights Reserved."
-                , false
+                + "\n"
+                + "Автор программы - Анатолий Кучеров (Ulv)."
+                + "\n"
+                + "Based on eggdrop scripts (IRC) of Viktorina 1.6 addons by MOSSs"
+                + "\n"
+                + "+ modification by Ulv"
+                + "\n"
+                + "+ some from mrissa.tcl (Based on 3hauka.tcl 2.0.3 by hex and Drakon_) v1.36 (bugsfix) by Maxe_Erte_the_Mad"
+                + "\n"
+                + "+ 3hauka.tcl 2.0.4-stable+php-stat-mod by hex and Drakon_"
+                + "\n"
+                + "+ quiz_q.tcl v1.19 by Kreon (Based on 3hauka.tcl 2.0.4 by hex and Drakon_)"
+                + "\n"
+                + "+ база вопросов v.2.7 от Sclex и других."
+                + "\n"
+                + "Игра представляет собой текстовую викторину. Бот задает вопросы, а вы отвечаете на них."
+                + "\n"
+                + "Корни игры растут из eggdrop (windrop) скрипта викторины, которая работала на IRC-канале #viktorina_bsatu сети https://irc.bynets.org"
+                + "\n"
+                + "Канал существовал примерно с 2009 по 2014 год (+/- пару лет). Историю канала можно частично проследить на форуме https://porovik.forum24.ru"
+                + "\n"
+                + "Владельцем канала был автор данной программы Анатолий Кучеров (под ником Ulv), который объединил несколько похожих скриптов викторины в один скрипт, который работал тогда на том канале."
+                + "\n"
+                + "Авторы скриптов и источник базы вопросов даны выше."
+                + "\n"
+                + "В данную программу добавлено несколько дополнительных возможностей, которые не были тогда реализованы на канале #viktorina_bsatu."
+                + "\n"
+                + "Попробуйте оффлайн викторину filln.itch.io/viktorina-offline для Windows и rustore.ru/catalog/app/com.ID3964234.viktorina для Android"
+                + "\n"
+                + "Посетите площадку игры vk.com/viktorina_place"
+                + "\n" 
+                + "Приятной игры!"
+                , true
             );
-            OutputText("Автор программы - Анатолий Кучеров (Ulv).");
-            OutputText("Based on eggdrop scripts (IRC) of Viktorina");
-            OutputText("1.6 addons by MOSSs");
-
-            OutputText("+ modification by Ulv");
-            OutputText("+ some from mrissa.tcl (Based on 3hauka.tcl 2.0.3 by hex and Drakon_) v1.36 (bugsfix) by Maxe_Erte_the_Mad");
-             OutputText("+ 3hauka.tcl 2.0.4-stable+php-stat-mod by hex and Drakon_");
-            OutputText("+ quiz_q.tcl v1.19 by Kreon (Based on 3hauka.tcl 2.0.4 by hex and Drakon_)");
-            OutputText("+ Questions base v.2.7 by Sclex & others.");
-            OutputText("Игра представляет собой текстовую викторину. Бот задает вопросы, а вы отвечаете на них.");
-            OutputText("Корни игры растут из eggdrop " +
-                "(windrop) скрипта викторины, которая работала на IRC-канале " +
-                "#viktorina_bsatu сети https://irc.bynets.org"
-                , false
-                );
-            OutputText("Канал существовал примерно с 2009 по 2014 год (+/- пару лет). " +
-                "Историю канала можно частично проследить на форуме https://porovik.forum24.ru", false);
-            OutputText("Владельцем канала был автор данной программы Анатолий Кучеров (под ником Ulv), который объединил несколько похожих скриптов викторины в один скрипт, который работал тогда на том канале.");
-            OutputText("Авторы скриптов и источник базы вопросов даны выше.");
-            OutputText("В данную программу добавлено несколько дополнительных возможностей, которые не были тогда реализованы на канале #viktorina_bsatu.");
-            OutputText("Попробуйте оффлайн викторину https://filln.itch.io/viktorina-offline для Windows и https://www.rustore.ru/catalog/app/com.ID3964234.viktorina для Android", false);
-            OutputText("Посетите площадку игры https://vk.com/viktorina_place", false);
-            OutputText("Приятной игры!");
         }
 
         public override void OutputCongratOnAllQuestionsAnswered(string username, bool allQuestionsAnswered)

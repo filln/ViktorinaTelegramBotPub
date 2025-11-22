@@ -110,7 +110,8 @@ namespace Viktorina.Bot
 				string startCommand,
 				int countOfQuestions,
 				int countOfAnswers,
-				TimeSpan duration
+				TimeSpan duration,
+				string answer
 			)
 		{
 			//Викторина остановлена. Для запуска напиши startCommand. Всего прозвучало countOfQuestions вопросов.
@@ -321,8 +322,11 @@ namespace Viktorina.Bot
 				+ CreateFormatedText(last)
 			);
 		}
-
-		public override void OutputBeginTopPoints()
+        public override string CreateBeginTopPointsStr()
+        {
+            return "Топ 5 игроков по очкам :";
+        }
+        public override void OutputBeginTopPoints()
 		{
 			//Топ игроков по очкам (внутренняя база вопросов):
 			OutputText
@@ -330,8 +334,11 @@ namespace Viktorina.Bot
 				CreateFormatedText("Топ 5 гульцоў па ачках :")
 			);
 		}
-
-		public override void OutputBeginTopRoundPoints()
+        public override string CreateBeginTopRoundPointsStr()
+        {
+            return "Топ 5 игроков по очкам :";
+        }
+        public override void OutputBeginTopRoundPoints()
 		{
 			//Топ игроков по очкам за раунд:
 			OutputText
@@ -339,8 +346,33 @@ namespace Viktorina.Bot
 				CreateFormatedText("Топ 5 гульцоў па ачках за раўнд :")
 			);
 		}
-
-		public override void OutputProfileInTopPoints
+        public override string CreateProfileInTopPointsStr
+    (
+        int place,
+        string username,
+        bool allQuestionsAnswered,
+        string title,
+        int points
+    )
+        {
+            //#1: Ulv звание -[[[ 50 очков.
+            if (allQuestionsAnswered)
+            {
+                username = "[[" + username + "]]";
+            }
+            string str =
+                "\n"
+                + "#"
+                + place.ToString()
+                + ": "
+                + CreateFormatedText(username)
+                + OutputTitle(title)
+                + " - "
+                + CreateFormatedText(points.ToString())
+                + " очков.";
+            return str;
+        }
+        public override void OutputProfileInTopPoints
 			(
 				int place,
 				string username,

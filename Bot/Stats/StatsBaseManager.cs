@@ -3,10 +3,12 @@
 /**
  * Содержит статистику профиля, хранит ее на время запуска программы.
  */
-
+//https://github.com/ExtendedXmlSerializer/home/wiki/The-Basics
 
 using System.Runtime.Serialization.Formatters.Binary;
-
+//using ExtendedXmlSerializer;
+//using System.Xml;
+//using System.Xml.Serialization;
 
 namespace Viktorina.Bot.Stats
 {
@@ -18,6 +20,7 @@ namespace Viktorina.Bot.Stats
             answersFlags = new AnswersFlags(this);
             statsHandler = new StatsHandler(this);
             statsDataFilePath = UserDataFolderName + "/stats.dat";
+            //statsDataFilePath = UserDataFolderName + "/stats.xml";
 
         }
 
@@ -28,6 +31,8 @@ namespace Viktorina.Bot.Stats
         public StatsHandler statsHandler;
         private OutputTextManagerParent OutputTextManager => viktorinaMain.OutputTextManager;
         private BinaryFormatter Formatter => viktorinaMain.Formatter;
+        //private XmlSerializer Formatter => viktorinaMain.Formatter;
+        //private IExtendedXmlSerializer Formatter => viktorinaMain.Formatter;
         public readonly AnswersFlags answersFlags;
         public TitlesControlParent TitlesControl => viktorinaMain.TitlesControl;
 
@@ -172,12 +177,12 @@ namespace Viktorina.Bot.Stats
             (
                 (firstPair, secondPair) => firstPair.Value.CompareTo(secondPair.Value)
             );
-            OutputTextManager.OutputBeginTopPoints();
+            string topStr = OutputTextManager.CreateBeginTopPointsStr();
             int place = 0;
             foreach (var stat in stats)
             {
                 place++;
-                OutputTextManager.OutputProfileInTopPoints
+                string topStrApp = OutputTextManager.CreateProfileInTopPointsStr
                     (
                         place,
                         stat.Key,
@@ -185,11 +190,13 @@ namespace Viktorina.Bot.Stats
                         stat.Value.title,
                         stat.Value.points
                     );
+                topStr += topStrApp;
                 if (place == 5)
                 {
                     break;
                 }
             }
+            OutputTextManager.OutputText(topStr, true);
         }
 
         public void OutputTopRoundPoints()
@@ -199,12 +206,17 @@ namespace Viktorina.Bot.Stats
             (
                 (firstPair, secondPair) => firstPair.Value.CompareToByRoundPoints(secondPair.Value)
             );
-            OutputTextManager.OutputBeginTopRoundPoints();
+            string topStr = OutputTextManager.CreateBeginTopRoundPointsStr();
+            bool topIsFill = false;
             int place = 0;
             foreach (var stat in stats)
             {
                 place++;
-                OutputTextManager.OutputProfileInTopPoints
+                if (stat.Value.pointsRound == 0)
+                {
+                    break;
+                }
+                string topStrApp = OutputTextManager.CreateProfileInTopPointsStr
                     (
                         place,
                         stat.Key,
@@ -212,11 +224,17 @@ namespace Viktorina.Bot.Stats
                         stat.Value.title,
                         stat.Value.pointsRound
                     );
+                topStr += topStrApp;
+                topIsFill = true;
                 if (place == 5)
                 {
                     break;
                 }
             }
+            if (topIsFill)
+            {
+                OutputTextManager.OutputText(topStr, true);
+            }            
         }
 
         public void ExecuteStat(string username)
@@ -293,7 +311,9 @@ namespace Viktorina.Bot.Stats
             statsHandler.stats.Clear();
             //Прочитать файл.
             fileStream = new FileStream(statsDataFilePath, FileMode.Open, FileAccess.Read);
+            //XmlReader reader = XmlReader.Create(fileStream);
             statsHandler.stats = (Dictionary<string, SerializableStatsItem>)Formatter.Deserialize(fileStream);
+            //statsHandler.stats = (Dictionary<string, SerializableStatsItem>)Formatter.Deserialize(reader);
             fileStream.Close();
             statsHandler.CheckLastMonthAndDayOfGame();
 
@@ -307,6 +327,7 @@ namespace Viktorina.Bot.Stats
             fileStream = new FileStream(statsDataFilePath, FileMode.Truncate);
             Formatter.Serialize(fileStream, statsHandler.stats);
             fileStream.Close();
+            Console.WriteLine("WriteData");
             return true;
         }
 

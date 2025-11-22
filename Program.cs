@@ -31,7 +31,7 @@ namespace ViktorinaTelegramBot
         private static void CurrentDomain_ProcessExit(object? sender, EventArgs e)
         {
             ViktorinaStarter.GetCurrent().CurrentDomain_ProcessExit();
-            Console.WriteLine("CurrentDomain_ProcessExit()");
+            Console.WriteLine("Program CurrentDomain_ProcessExit()");
         }
 
 

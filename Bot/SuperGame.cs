@@ -100,7 +100,7 @@ namespace Viktorina.Bot
             timersManager.StartQuestionTimer();
         }
 
-        public void ExecuteStop(string username, string startCommand, int countOfQuestions, int countOfAnswers, TimeSpan duration)
+        public void ExecuteStop(string username, string startCommand, int countOfQuestions, int countOfAnswers, TimeSpan duration, string answer)
         {
             if (username != Username)
             {
@@ -108,7 +108,7 @@ namespace Viktorina.Bot
             }
             statsBaseManager.IncreasePoints(Username, -Bet);
             statsBaseManager.IncreaseSuperGameLoss(Username, Bet);
-            OutputTextManager.ExecuteStop(startCommand, countOfQuestions, countOfAnswers, duration);
+            OutputTextManager.ExecuteStop(startCommand, countOfQuestions, countOfAnswers, duration, answer);
         }
 
         public void OutputAnswer(string answer)

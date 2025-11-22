@@ -11,10 +11,12 @@ namespace Viktorina.Bot.Stats
         public StatsHandler(StatsBaseManager statsBaseManager)
         {
             stats = new Dictionary<string, SerializableStatsItem>();
+
             this.statsBaseManager = statsBaseManager;
         }
 
         public Dictionary<string, SerializableStatsItem> stats;
+        //public List<KeyValuePair<string, SerializableStatsItem>> stats;
         StatsBaseManager statsBaseManager;
 
         /**

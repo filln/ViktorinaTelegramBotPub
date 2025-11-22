@@ -17,7 +17,7 @@ namespace ViktorinaTelegramBot.Telegram
         public TelegramConnect() 
         {
             // replace YOUR_BOT_TOKEN below, or set your TOKEN in Project Properties > Debug > Launch profiles UI > Environment variables
-            var token = Environment.GetEnvironmentVariable("TOKEN") ?? "Your_Token";
+            var token = Environment.GetEnvironmentVariable("TOKEN") ?? "YourToken";
 
             cts = new CancellationTokenSource();
             bot = new TelegramBotClient(token, cancellationToken: cts.Token);

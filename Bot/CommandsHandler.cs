@@ -21,18 +21,26 @@ namespace Viktorina.Bot
 			set
 			{
 				//Отдельно определить команды, которые состоят из префиксов. Сейчас это, например, команды хинтов ! и !!
-				if 
+				//Команды хинтов 1х 11х сделаны для мобильной клавиатуры
+				if
 					(
 						value == (viktorinaMain.CommandsPrefix).ToString()
 						|| value == (viktorinaMain.CommandsPrefix).ToString() + (viktorinaMain.CommandsPrefix).ToString()
+						|| value == "1х"
+						|| value == "11х"
 					)
 				{
+					//Console.WriteLine(value);
 					command = value;
 					return;
 				}
 				//При определении переменной, если первый символ равен префиксу команд, то определить переменную как строку, которая после префикса команд.
-				if (value.Substring(0, 1) == (viktorinaMain.CommandsPrefix).ToString())
+				//Команды могут начинаться с единицы (1) для удобства при мобильной клавиатуре
+				if (value.Substring(0, 1) == (viktorinaMain.CommandsPrefix).ToString()
+					|| value.Substring(0, 1) == "1"
+					)
 				{
+					//Console.WriteLine(value);
 					command = value.Substring(1);
 				}
 			}
@@ -49,19 +57,19 @@ namespace Viktorina.Bot
 			{
 				ExecuteHelp();
 			}
-			if (Command == "хелп")
-			{
-				ExecuteHelp();
-			}
 			else if (Command == CommandsList.Stop)
 			{
 				ExecuteStop(username);
 			}
-			else if (Command == CommandsList.Hint1)
+			else if (Command == CommandsList.Hint1
+				|| Command == "1х"
+                )
 			{
 				ExecuteHint1(username);
 			}
-			else if (Command == CommandsList.Hint2)
+			else if (Command == CommandsList.Hint2
+                || Command == "11х"
+                )
 			{
 				ExecuteHint2(username);
 			}
@@ -70,11 +78,6 @@ namespace Viktorina.Bot
 			{
 				ExecuteNext(username);
 			}
-			else if (Command == "хз")
-			{
-				ExecuteNext(username);
-			}
-
 			else if (Command == CommandsList.ProfilesList)
 			{
 				ExecuteProfilesList(username);

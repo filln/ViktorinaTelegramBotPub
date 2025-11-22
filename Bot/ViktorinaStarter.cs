@@ -8,9 +8,12 @@
 
 
 using System.Runtime.Serialization.Formatters.Binary;
-using Viktorina.Localization;
+//using ExtendedXmlSerializer;
+//using ExtendedXmlSerializer.Configuration;
+//using System.Xml.Serialization;
 using Viktorina.Bot.Stats;
-using ViktorinaTelegramBot;
+using Viktorina.Localization;
+//using ViktorinaTelegramBot;
 using ViktorinaTelegramBot.Telegram;
 
 
@@ -29,6 +32,8 @@ namespace Viktorina.Bot
 
             //Создать объект-сериализатор для считывания и записи данных профилей.
             Formatter = new BinaryFormatter();
+            //Formatter = new XmlSerializer(typeof(Dictionary<string, SerializableStatsItem>));
+            //Formatter = new ConfigurationContainer().Create();
 
             localizationManager = new LocalizationManager(this);
             localizationManager.SelectLanguage(LanguagesList.russian);
@@ -42,10 +47,8 @@ namespace Viktorina.Bot
         {
             if (current == null)
             {
-                Console.WriteLine("ViktorinaStarter? current == null");
                 current = new ViktorinaStarter();
             }
-            Console.WriteLine("ViktorinaStarter? current != null");
             return current;
         }
 
@@ -54,7 +57,8 @@ namespace Viktorina.Bot
         */
         public string UserDataFolderName { get; private set; }
         public BinaryFormatter Formatter { get; private set; }
-
+        //public XmlSerializer Formatter { get; private set; }
+        //public IExtendedXmlSerializer Formatter { get; private set; }
         public string CurrentLanguage => localizationManager.CurrentLanguage;
 
         //Тут объявляются переменные, объекты которых имеют перевод на разные языки.
@@ -98,7 +102,7 @@ namespace Viktorina.Bot
         public void CurrentDomain_ProcessExit()
         {
             viktorinaMain.CurrentDomain_ProcessExit();
-            Console.WriteLine("CurrentDomain_ProcessExit()");
+            Console.WriteLine("Viktorina Starter CurrentDomain_ProcessExit()");
         }
 
         public void SendViktorinaMainToOutputTextManager()

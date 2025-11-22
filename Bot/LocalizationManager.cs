@@ -4,7 +4,6 @@
  * Класс для выбора языка программы.
  */
 
-using System.Runtime.Serialization.Formatters.Binary;
 using Viktorina.Bot;
 using Viktorina.Bot.Stats;
 
@@ -28,7 +27,6 @@ namespace Viktorina.Localization
 		 * Variables
 		 */
 		private readonly ViktorinaStarter viktorinaStarter;
-		public BinaryFormatter Formatter => viktorinaStarter.Formatter;
 		public string CurrentLanguage { get; private set; }
 
 
