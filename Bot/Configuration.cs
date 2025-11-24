@@ -10,8 +10,6 @@ namespace Viktorina.Bot
 	{
 		public Configuration()
 		{
-			//OwnerID = 5244963513;
-			//channel id -722117411 or -1001680312705
 			OwnerName = "Ulv_filln";
 			BotName = "Vik42_bot";
 			CommandsPrefix = '!';
