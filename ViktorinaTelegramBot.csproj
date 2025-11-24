@@ -20,9 +20,12 @@
 
   <ItemGroup>
     <None Remove="Bot\questions.txt" />
+    <None Remove="Bot\questionsBY.txt" />
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Bot\questionsBY.txt" />
+    <EmbeddedResource Include="Bot\questionsTest.txt" />
     <EmbeddedResource Include="Bot\questions.txt" />
   </ItemGroup>
 

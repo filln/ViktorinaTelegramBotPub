@@ -31,16 +31,16 @@ namespace Viktorina.Bot
 			PointsForAnswerHint2 = 1;
 
 			//Кол. правильных ответов для начала суперигры.
-			RightAnswersCountInARowForSuperGame = 10;
+			RightAnswersCountInARowForSuperGame = 7;
 			//Ставки на суперигру.
-			MinPointsSuperGame = 40;
-			MaxPointsSuperGame = 80;
+			MinPointsSuperGame = 50;
+			MaxPointsSuperGame = 100;
 			//Ожидание согласия на супер-игру, сек.
 			WaitingAgreementPlaySuperGameInterval = 10;
 
 			//После RightAnswersCountInARowForCongrat правильных ответов каждый последующий правильный ответ выводится поздравление типа "Ulv отвечает на 4 вопроса подряд!"
 			//и начисляются бонусные очки в размере statsBaseManager.CurrentRightAnswersCountInARowForCongrat (через viktorinaMain)
-			RightAnswersCountInARowForCongrat = 4;
+			RightAnswersCountInARowForCongrat = 3;
 
 			//Максимальное количество неотвеченных вопросов в раунде. При достижении останавливается игра.
 			MaxCountOfLoseAnswersInRound = 100;

@@ -26,7 +26,8 @@ namespace Viktorina.Bot
         {
             if (username != this.username)
             {
-                ResetCurrentAnswersInARow();
+                this.username = username;
+                count = 0;
             }
             count++;
         }

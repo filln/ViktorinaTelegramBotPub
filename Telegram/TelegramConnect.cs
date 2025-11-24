@@ -27,9 +27,8 @@ namespace ViktorinaTelegramBot.Telegram
 
             bot.OnError += OnError;
             bot.OnMessage += OnMessage;
-
-
-
+            //Внутри конструктора ChatId() ввести ИД канала (начинается с минуса)
+            //bot.SendMessage(new ChatId(Id), "Викторина запустилась", ParseMode.Markdown);
         }
 
         /**
@@ -81,7 +80,7 @@ namespace ViktorinaTelegramBot.Telegram
 
         async Task OnMessage(Message msg, UpdateType type)
         {
-            //Console.WriteLine(msg.Text + " from " + msg.From.Username + " in " + msg.Chat.Type.ToString() + " " + msg.Chat.Username);
+            //Console.WriteLine(msg.Text + " from " + msg.From.Username + " in " + msg.Chat.Type.ToString() + " " + msg.Chat.Username + " " + msg.Chat.Id);
             if (msg == null)
             {
                 return;

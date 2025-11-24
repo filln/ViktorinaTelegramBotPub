@@ -151,8 +151,7 @@ namespace Viktorina.Bot
                 || inputText[0] == '1'
                 )
             {
-                commandsHandler.HandleCommand(inputText, username);
-                return;
+                commandsHandler.HandleCommand(inputText, username);               
             }
 
             if (GameOn == false)
@@ -219,7 +218,7 @@ namespace Viktorina.Bot
                 }
 
                 //Определить очки за ответ при наличии бонуса за ответы подряд. Вывести поздравление.
-                if ((answersInARow.GetCurrentAnswersInARow() >= RightAnswersCountInARowForCongrat) && !hint2)
+                if (answersInARow.GetCurrentAnswersInARow() >= RightAnswersCountInARowForCongrat)
                 {
                     statsBaseManager.IncreasePoints(username, pointsForAnswer + answersInARow.GetCurrentAnswersInARow());
                     OutputTextManager.OutputCongratOnCorrectAnswer

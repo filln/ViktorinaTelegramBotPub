@@ -323,26 +323,26 @@ namespace Viktorina.Bot
         }
         public override string CreateBeginTopPointsStr()
         {
-            return "Топ 5 игроков по очкам :";
+            return "Топ 5 игроков:";
         }
         public override void OutputBeginTopPoints()
         {
             //Топ игроков по очкам (внутренняя база вопросов):
             OutputText
             (
-                CreateFormatedText("Топ 5 игроков по очкам :")
+                CreateFormatedText("Топ 5 игроков:")
             );
         }
         public override string CreateBeginTopRoundPointsStr()
         {
-            return "Топ 5 игроков по очкам :";
+            return "Топ 5 игроков за раунд:";
         }
         public override void OutputBeginTopRoundPoints()
         {
             //Топ игроков по очкам за раунд:
             OutputText
             (
-                CreateFormatedText("Топ 5 игроков по очкам за раунд :")
+                CreateFormatedText("Топ 5 игроков за раунд :")
             );
         }
         public override string CreateProfileInTopPointsStr
@@ -739,10 +739,8 @@ namespace Viktorina.Bot
             OutputText
             (
                 "Вопрос суперигры: "
-            );
-            OutputText
-            (
-                OutputQuestionInternal(outputText, answerLength)
+                + "\n"
+                + OutputQuestionInternal(outputText, answerLength)
             );            
         }
 

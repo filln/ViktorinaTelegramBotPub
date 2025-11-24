@@ -39,6 +39,7 @@ namespace Viktorina.Bot
 				if (CurrentLanguage == LanguagesList.russian)
                 {
 					return "ViktorinaTelegramBot.Bot.questions.txt";
+                    //return "ViktorinaTelegramBot.Bot.questionsTest.txt";
                 }
 				if (CurrentLanguage == LanguagesList.belorussian)
 				{
