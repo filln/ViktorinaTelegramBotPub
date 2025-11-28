@@ -26,8 +26,8 @@ namespace Viktorina.Bot
 					(
 						value == (viktorinaMain.CommandsPrefix).ToString()
 						|| value == (viktorinaMain.CommandsPrefix).ToString() + (viktorinaMain.CommandsPrefix).ToString()
-						|| value == "1х"
-						|| value == "11х"
+						|| value == "0х"
+						|| value == "00х"
 					)
 				{
 					//Console.WriteLine(value);
@@ -37,7 +37,7 @@ namespace Viktorina.Bot
 				//При определении переменной, если первый символ равен префиксу команд, то определить переменную как строку, которая после префикса команд.
 				//Команды могут начинаться с единицы (1) для удобства при мобильной клавиатуре
 				if (value.Substring(0, 1) == (viktorinaMain.CommandsPrefix).ToString()
-					|| value.Substring(0, 1) == "1"
+					|| value.Substring(0, 1) == "0"
 					)
 				{
 					//Console.WriteLine(value);
@@ -62,13 +62,13 @@ namespace Viktorina.Bot
 				ExecuteStop(username);
 			}
 			else if (Command == CommandsList.Hint1
-				|| Command == "1х"
+				|| Command == "0х"
                 )
 			{
 				ExecuteHint1(username);
 			}
 			else if (Command == CommandsList.Hint2
-                || Command == "11х"
+                || Command == "00х"
                 )
 			{
 				ExecuteHint2(username);

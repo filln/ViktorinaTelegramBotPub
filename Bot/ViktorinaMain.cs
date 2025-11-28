@@ -148,7 +148,7 @@ namespace Viktorina.Bot
         {
             //Если игрок ввел команду.
             if (inputText[0] == CommandsPrefix
-                || inputText[0] == '1'
+                || inputText[0] == '0'
                 )
             {
                 commandsHandler.HandleCommand(inputText, username);               
@@ -457,7 +457,8 @@ namespace Viktorina.Bot
             {
                 superGame.ExecuteStop(username, CommandsPrefix + CommandsList.Start, CountOfQuestionsInRound, CountOfAnswersInRound, StopTime - StartTime, Answer);
             }
-        
+            answersInARowForSupergame.ResetCurrentAnswersInARow();
+            answersInARow.ResetCurrentAnswersInARow();
             timersManager.StopWriteProfileBaseTimer();
             statsBaseManager.TryWriteData();
 
