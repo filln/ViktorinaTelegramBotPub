@@ -457,12 +457,15 @@ namespace Viktorina.Bot
             {
                 superGame.ExecuteStop(username, CommandsPrefix + CommandsList.Start, CountOfQuestionsInRound, CountOfAnswersInRound, StopTime - StartTime, Answer);
             }
+            ResetAnswer();
+            QuestionExists = false;
+            hint1 = false;
+            hint2 = false;
             answersInARowForSupergame.ResetCurrentAnswersInARow();
             answersInARow.ResetCurrentAnswersInARow();
             timersManager.StopWriteProfileBaseTimer();
             statsBaseManager.TryWriteData();
 
-            questionsBaseManager.ExecuteStop();
             timersManager.StopWaitingAgreementPlaySuperGameTimer();
             timersManager.StopAnswerTimer();
             timersManager.StopQuestionTimer();
